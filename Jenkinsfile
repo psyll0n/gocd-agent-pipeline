@@ -11,8 +11,14 @@ pipeline {
        
         stage("Running GoCD Server in Docker.") { 
             steps {  
-                sh "docker run -itd --name gocd-agent -e CI=true -e gocd/gocd-agent-ubuntu-16.04:v21.1.0"
+                script {docker run -itd --name gocd-agent -e CI=true -e 
+                        GO_SERVER_URL=https://$(docker inspect --format='{{(index (index .NetworkSettings.IPAddress))}}' gocd-server):8154/go 
+                            gocd/gocd-agent-alpine-3.8:v18.10.0                 
+               }        
             }
         }
     }
 }
+
+
+
